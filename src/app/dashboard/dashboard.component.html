@@ -1,18 +1,24 @@
-<h1>Forecast App</h1>
-<select name="city" id="city" (change)="cityChanges($event)">
-  <option value="Jakarta">Jakarta</option>
-  <option value="Bangkok">Bangkok</option>
-  <option value="Singapore">Singapore</option>
-</select>
-<table *ngIf="formatted_climates">
-  <tr>
-    <th>Jakarta</th>
-    <th>Suhu</th>
-    <th>Perbedaan</th>
-  </tr>
-  <tr *ngFor="let climate of formatted_climates">
-    <td>{{ climate.date }}</td>
-    <td>{{ climate.climate }}</td>
-    <td>{{ climate.diff }}</td>
-  </tr>
-</table>
+<div class="layout">
+  <div class="content">
+    <h1>Forecast App</h1>
+    <div>
+      <select name="city" id="city" (change)="cityChanges($event)">
+        <option value="Jakarta">Jakarta</option>
+        <option value="Bangkok">Bangkok</option>
+        <option value="Singapore">Singapore</option>
+      </select>
+    </div>
+    <table *ngIf="formatted_climates">
+      <tr>
+        <th>Jakarta</th>
+        <th>Suhu</th>
+        <th>Perbedaan</th>
+      </tr>
+      <tr *ngFor="let climate of formatted_climates">
+        <td>{{ climate.date }}</td>
+        <td>{{ climate.climate }} C</td>
+        <td>{{ climate.diff }} C</td>
+      </tr>
+    </table>
+  </div>
+</div>
