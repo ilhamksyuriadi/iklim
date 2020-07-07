@@ -4,10 +4,15 @@
   <option value="Bangkok">Bangkok</option>
   <option value="Singapore">Singapore</option>
 </select>
-<table>
+<table *ngIf="formatted_climates">
   <tr>
     <th>Jakarta</th>
     <th>Suhu</th>
     <th>Perbedaan</th>
+  </tr>
+  <tr *ngFor="let climate of formatted_climates">
+    <td>{{ climate.date }}</td>
+    <td>{{ climate.climate }}</td>
+    <td>{{ climate.diff }}</td>
   </tr>
 </table>
