@@ -11,15 +11,17 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DashboardComponent implements OnInit {
 
-  private climates: any;
-  private date_list: any;
+  public climates: any;
+  public date_list: any;
   public formatted_climates: any;
+  public city: any;
 
   constructor( private http: HttpClient ) { }
 
   ngOnInit(): void {
     // set city for the first time to jakarta.
-    this.setClimate('Jakarta')
+    this.city = 'Jakarta'
+    this.setClimate(this.city)
   }
 
   // get api
@@ -121,10 +123,11 @@ export class DashboardComponent implements OnInit {
     return data_per_day
   }
 
+  // city changes
   cityChanges(event) {
 
-    let city = event.srcElement.value;
-    this.setClimate(city);
+    this.city = event.srcElement.value;
+    this.setClimate(this.city);
 
   }
 }

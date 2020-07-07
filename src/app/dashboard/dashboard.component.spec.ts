@@ -22,4 +22,12 @@ describe('DashboardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should be', () => {
+    component.cityChanges(event)
+
+    expect(component.climates).toBeDefined();
+    expect(component.formatted_climates).toBeDefined();
+    expect(component.date_list).toBeDefined();
+  })
 });
