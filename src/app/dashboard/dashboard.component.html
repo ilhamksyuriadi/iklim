@@ -8,16 +8,21 @@
         <option value="Singapore">Singapore</option>
       </select>
     </div>
-    <table *ngIf="formatted_climates">
+    <table *ngIf="climate">
       <tr>
-        <th>{{ city }}</th>
+        <th>{{ climate.city }}</th>
         <th>Suhu</th>
         <th>Perbedaan</th>
       </tr>
-      <tr *ngFor="let climate of formatted_climates">
-        <td>{{ climate.date }}</td>
-        <td>{{ climate.climate }} C</td>
-        <td>{{ climate.diff }} C</td>
+      <tr *ngFor="let cf of climate.forecast_data">
+        <td>{{ cf.date }}</td>
+        <td>{{ cf.climate }} C</td>
+        <td>{{ cf.diff }} C</td>
+      </tr>
+      <tr>
+        <th>Rata-Rata</th>
+        <th *ngIf="climate.climate_avg">{{ climate.climate_avg }} C</th>
+        <th *ngIf="climate.diff_climate_avg">{{ climate.diff_climate_avg }} C</th>
       </tr>
     </table>
   </div>

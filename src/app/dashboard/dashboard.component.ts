@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ClimateModel } from '../model/climate';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,17 +12,15 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DashboardComponent implements OnInit {
 
+  public climate: any;
   public climates: any;
-  public date_list: any;
-  public formatted_climates: any;
-  public city: any;
 
   constructor( private http: HttpClient ) { }
 
   ngOnInit(): void {
     // set city for the first time to jakarta.
-    this.city = 'Jakarta'
-    this.setClimate(this.city)
+    this.climate = new ClimateModel('Jakarta')
+    this.setClimate(this.climate.city)
   }
 
   // get api
@@ -32,14 +31,22 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  // set to variable
+  // set to model
   setClimate(city){
 
     this.getClimate(city).subscribe( res => {
       if (res) {
         this.climates = res['list'];
-        this.date_list = this.getDateList(this.climates);
-        this.formatted_climates = this.formatingClimates(this.climates, this.date_list);
+
+        let new_date_list = this.getDateList(this.climates);
+        let formatted_climates = this.formatingClimates(this.climates, new_date_list);
+        this.climate.setForeCastData(formatted_climates);
+
+        let climate_avg = this.getAllAverageClimate(this.climate.forecast_data);
+        this.climate.setClimateAvg(climate_avg);
+
+        let diff_climate_avg = this.getAllAverageDiffClimate(this.climate.forecast_data);
+        this.climate.setDiffClimateAvg(diff_climate_avg);
       }
     })
 
@@ -50,7 +57,7 @@ export class DashboardComponent implements OnInit {
 
     let formatted_climates = [];
     let divided_data = this.dividingData(climates, date_list);
-    for (let i = 0; i < this.date_list.length; i++) {
+    for (let i = 0; i < date_list.length; i++) {
       let climate_object = {
         date: date_list[i],
         climate: this.getAverageClimate(divided_data[date_list[i]]),
@@ -58,7 +65,6 @@ export class DashboardComponent implements OnInit {
       }
       formatted_climates.push(climate_object);
     }
-    console.log('divided', formatted_climates);
     return formatted_climates;
 
   }
@@ -76,6 +82,18 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  // get all average climate
+  getAllAverageClimate(forecast) {
+
+    let avg = 0
+    for (let i = 0; i < forecast.length; i++) {
+      avg += parseInt(forecast[i].climate)
+    }
+
+    return (avg / forecast.length).toFixed(2);
+
+  }
+
   // get average diff climate
   getAverageDiffClimate(data) {
 
@@ -86,6 +104,18 @@ export class DashboardComponent implements OnInit {
     climate_diff = climate_diff / data.length;
     let celcius_climates_diff = climate_diff.toFixed(2);
     return celcius_climates_diff;
+
+  }
+
+  // get all average diff climate
+  getAllAverageDiffClimate(forecast) {
+
+    let avg = 0
+    for (let i = 0; i < forecast.length; i++) {
+      avg += parseInt(forecast[i].diff)
+    }
+
+    return (avg / forecast.length).toFixed(2);
 
   }
 
@@ -126,8 +156,9 @@ export class DashboardComponent implements OnInit {
   // city changes
   cityChanges(event) {
 
-    this.city = event.srcElement.value;
-    this.setClimate(this.city);
+    let new_city = event.srcElement.value;
+    this.climate.setCity(new_city)
+    this.setClimate(this.climate.city);
 
   }
 }
